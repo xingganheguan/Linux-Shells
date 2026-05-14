@@ -1,0 +1,54 @@
+services:
+  nginx:
+    build:
+      context: ./services/nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ${SOURCE_DIR}:/www/:rw
+      - ${NGINX_SSL_CERTIFICATE_DIR}:/ssl
+      - ${NGINX_CONFD_DIR}:/etc/nginx/conf.d
+      - ${NGINX_CONF_FILE}:/etc/nginx/nginx.conf
+      - ${NGINX_FASTCGI_PHP_CONF}:/etc/nginx/fastcgi-php.conf
+      - ${NGINX_FASTCGI_PARAMS}:/etc/nginx/fastcgi_params
+      - ${NGINX_LOG_DIR}:/var/log/nginx
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    restart: always
+    networks:
+      - default
+
+  php82:
+    build:
+      context: ./services/php82
+      args:
+        DEBIAN_MIRROR_DOMAIN: deb.debian.org
+        PHP_EXTENSIONS: "$PHP82_EXTENSIONS"
+        TZ: "$TZ"
+    container_name: php82
+    expose:
+      - 9501
+    volumes:
+      - ${SOURCE_DIR}:/www/:rw
+      - ${PHP82_PHP_CONF_FILE}:/usr/local/etc/php/php.ini
+      - ${PHP82_FPM_CONF_FILE}:/usr/local/etc/php-fpm.d/www.conf
+      - ${PHP82_LOG_DIR}:/var/log/php
+      - ${PHP82_DATA_COMPOSER}:/tmp/composer
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    restart: always
+    cap_add:
+      - SYS_PTRACE
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      driver: default
+      # 解除下面的注释可以设置网段，用于nginx等容器固定容器IP
+      #config:
+      #  - subnet: 10.0.0.0/24
