@@ -13,7 +13,7 @@ apt update
 
 apt install -y xvfb x11-utils x11-xserver-utils xdotool 
 
-apt install -y wget curl sudo rsync p7zip-full htop \
+apt install -y wget curl screen sudo rsync p7zip-full htop \
     libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 \
     libxss1 libxcomposite1 libxdamage1 libxrandr2 \
     libgbm1 libasound2 python3 python3-pip snapd
