@@ -70,8 +70,5 @@ systemctl enable --now xvfb.service
 
 # 设置开机启动
 systemctl enable rsync.service
-
-# 如果 rsync 已经在运行，则不重复启动
-if ! pgrep -x rsync >/dev/null; then
-    systemctl start rsync.service
-fi
+# 直接重启rsync服务
+systemctl restart rsync.service
