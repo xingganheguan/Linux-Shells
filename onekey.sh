@@ -48,5 +48,30 @@ Environment=DISPLAY=:99
 WantedBy=multi-user.target
 EOF
 
+cat >/etc/systemd/system/rsync.service <<'EOF'
+[Unit]
+Description=Rsync Daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/rsync --daemon --no-detach
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# 重新加载 systemd
 systemctl daemon-reload
 systemctl enable --now xvfb.service
+
+# 设置开机启动
+systemctl enable rsync.service
+
+# 如果 rsync 已经在运行，则不重复启动
+if ! pgrep -x rsync >/dev/null; then
+    systemctl start rsync.service
+fi
