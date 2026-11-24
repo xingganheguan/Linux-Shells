@@ -21,7 +21,7 @@ apt install -y wget curl screen sudo rsync p7zip-full htop \
 # 解除 pip 安装模块限制
 mv /usr/lib/python3.13/EXTERNALLY-MANAGED /usr/lib/python3.13/EXTERNALLY-MANAGED.old
 
-pip install arrow lxml openpyxl numpy pandas jinja2 requests DrissionPage zhconv
+pip install arrow lxml openpyxl numpy pandas jinja2 requests DrissionPage zhconv beautifulsoup4
 
 # 安装最新版chrome
 # 下载最新版 deb 包
